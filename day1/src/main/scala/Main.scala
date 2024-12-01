@@ -16,12 +16,30 @@ def tests = {
     solution_2.flatMap(result =>
       ZIO.logInfo(s"Test result: $result expected 31")
     )
-}.provide(testData)
+}.provide(
+  ZLayer.succeed(
+    ZStream
+      .fromIterable(
+        """3   4
+          |4   3
+          |2   5
+          |1   3
+          |3   9
+          |3   3""".stripMargin
+      )
+      .map(_.toByte)
+  )
+)
 
 def solutions = {
   solution_1.flatMap(result => ZIO.logInfo(s"Part 1 result: $result")) *>
     solution_2.flatMap(result => ZIO.logInfo(s"Part 2 result: $result"))
-}.provide(lineStreamFromFile("data/day1"))
+}.provide(
+  ZLayer.succeed(
+    ZStream
+      .fromFileName("data/day1")
+  )
+)
 
 private val delim = "   "
 
@@ -68,22 +86,3 @@ def solution_2: RIO[ZStream[Any, Throwable, Byte], Int] =
         id * mapB.getOrElse(id, 0) * count
       }.sum
     }
-
-// I will be re-using this
-def lineStreamFromFile(path: String) = ZLayer.succeed {
-  ZStream
-    .fromFileName(path)
-}
-
-def testData = ZLayer.succeed(
-  ZStream
-    .fromIterable(
-      """3   4
-        |4   3
-        |2   5
-        |1   3
-        |3   9
-        |3   3""".stripMargin
-    )
-    .map(_.toByte)
-)
