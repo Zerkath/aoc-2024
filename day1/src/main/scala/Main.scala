@@ -25,7 +25,8 @@ def solutions = {
 
 private val delim = "   "
 
-def streamToTupleChunk =
+def streamToTupleChunk
+    : ZIO[ZStream[Any, Throwable, Byte], Throwable, Chunk[(Int, Int)]] =
   ZIO.serviceWithZIO[ZStream[Any, Throwable, Byte]] { stream =>
     stream
       .via(
