@@ -1,0 +1,7 @@
+**/.bloop
+**/.metals
+**/metals.sbt
+.bsp/
+src/main/resources/input-*
+target
+
