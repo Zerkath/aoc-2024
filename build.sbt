@@ -1,5 +1,3 @@
-import sbt.*
-
 Global / onChangedBuildSource := ReloadOnSourceChanges
 ThisBuild / resolvers ++= Resolvers.customResolvers
 ThisBuild / scalaVersion := "3.3.4"
@@ -14,7 +12,7 @@ val libs = Seq(
   "dev.zio" %% "zio-streams" % zioVersion,
   "dev.zio" %% "zio-test" % zioVersion % Test,
   "dev.zio" %% "zio-test-sbt" % zioVersion % Test,
-  "dev.zio" %% "zio-test-magnolia" % zioVersion % Test
+  "dev.zio" %% "zio-test-magnolia" % zioVersion % Test,
 )
 
 lazy val day1 = project
