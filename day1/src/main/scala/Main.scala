@@ -18,8 +18,7 @@ def tests = {
     )
 }.provide(
   ZLayer.succeed(
-    ZStream
-      .fromIterable(
+    Shared.byteStream(
         """3   4
           |4   3
           |2   5
@@ -27,7 +26,6 @@ def tests = {
           |3   9
           |3   3""".stripMargin
       )
-      .map(_.toByte)
   )
 )
 
@@ -43,16 +41,13 @@ def solutions = {
 
 def streamToTupleChunk
     : ZIO[ZStream[Any, Throwable, Byte], Throwable, Chunk[(Int, Int)]] =
-  ZIO.serviceWithZIO[ZStream[Any, Throwable, Byte]] { stream =>
-    stream
-      .via(
-        ZPipeline.utf8Decode
-          >>> ZPipeline.splitLines
-      )
-      .map(s => s.split("""\s+"""))
-      .map { case Array(a, b) => (a.toInt, b.toInt) }
-      .runCollect
-  }
+      Shared
+        .lineStream
+        .flatMap(_
+          .map(_.split("""\s+"""))
+          .map { case Array(a, b) => (a.toInt, b.toInt) }
+          .runCollect
+          )
 
 def solution_1: RIO[ZStream[Any, Throwable, Byte], Int] =
   streamToTupleChunk

@@ -15,10 +15,16 @@ val libs = Seq(
   "dev.zio" %% "zio-test-magnolia" % zioVersion % Test,
 )
 
+lazy val common = project
+  .settings(libraryDependencies ++= libs)
+
 lazy val day1 = project
-  .settings(
-    libraryDependencies ++= libs,
-  )
+  .settings(libraryDependencies ++= libs)
+  .dependsOn(common)
+
+lazy val day2 = project
+  .settings(libraryDependencies ++= libs)
+  .dependsOn(common)
 
 
 Global / testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
